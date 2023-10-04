@@ -1,13 +1,17 @@
 g = grid.connect()
 
-leds={1,0,0,0,0,0,0,0}
+leds={0,0,0,0,0,0,0,0}
+
+clocks={}
 
 function init()
-  params:add_number("rate","rate",1,10,1)
-
-  clock.run(blink)
+  
+  for i=1,8 do
+    clocks[i]=clock.run(blink,i,math.random(1,10))
+  end
   
   clock.run(grid_redraw_clock)
+  
 end
 
 function grid_redraw_clock()
@@ -20,14 +24,14 @@ function grid_redraw_clock()
   end
 end
 
-function blink()
+function blink(led,rate)
   local flip=0
   while true do
-    clock.sleep(0.5)
+    clock.sleep(rate/10)
     
     flip=(flip+1)%2
     
-    leds[1]=flip
+    leds[led]=flip
     grid_dirty=true
     
   end
